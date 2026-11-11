@@ -11,9 +11,3 @@ class Quiz:
 
     def is_correct(self, user_answer):
         return user_answer == self.answer
-
-quiz1 = Quiz("파이썬 창시자는?", ["귀도", "리누스"], 1)
-
-quiz1.show()                    #
-print(quiz1.is_correct(1))      # True
-print(quiz1.is_correct(2))      # False
