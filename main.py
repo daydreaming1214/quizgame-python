@@ -17,6 +17,9 @@ quizzes = [
          ["=", "==", "!=", ">="], 2),
 ]
 
+best_score = 0
+has_played = False
+
 def ask_number(prompt, min_value, max_value):
     """min_value~max_value 범위의 정수를 안전하게 입력받아 반환한다."""
     while True:  # 올바른 입력이 들어올 때까지 반복
@@ -49,6 +52,8 @@ def ask_text(prompt):
         return text
 
 def play_quiz():
+    global best_score, has_played
+
     print("퀴즈 풀기를 시작합니다!")
 
     score = 0  # 점수 초기화
@@ -67,6 +72,12 @@ def play_quiz():
 
     print("===== 퀴즈 결과 =====")
     print(f"총 {len(quizzes)}문제 중 {score}문제를 맞혔습니다!")
+
+    has_played = True
+
+    if score > best_score:
+        best_score = score
+        print("새로운 최고 점수를 기록했습니다!")
 
 def add_quiz():
     print("===== 새로운 퀴즈 추가 =====")
@@ -98,10 +109,19 @@ def list_quizzes():
 
     print(f"총 {len(quizzes)}개의 퀴즈가 있습니다.")
 
-    for i, quiz in enumerate(quizzes, start=1):
-        print(f"{i}. {quiz.question}")
+    if not quizzes:
+        print("등록된 퀴즈가 없습니다.")
+        return
 
-    print(f"총 {len(quizzes)}개의 퀴즈가 있습니다.")
+def show_best_score():
+    print("===== 최고 점수 =====")
+
+    if not has_played:
+        print("아직 퀴즈를 풀지 않았습니다.")
+        return
+    
+    print(f"현재 최고 점수: {best_score}점")
+
 
 def show_menu():
         """메뉴를 출력한다."""
@@ -127,7 +147,7 @@ def run():
             elif choice == 3:
                 list_quizzes()
             elif choice == 4:
-                print("[점수 확인] 준비 중입니다.")
+                 show_best_score()
             elif choice == 5:
                 print("프로그램을 종료합니다. 안녕히 가세요!")
                 break
