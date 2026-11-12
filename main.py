@@ -38,15 +38,15 @@ def ask_number(prompt, min_value, max_value):
         except ValueError:                # 3)의 변환 실패 처리 (예: abc)
             print("숫자만 입력할 수 있습니다. 다시 입력해 주세요.")
 
-# for quiz in quizzes:
-#     quiz.show()                     # 문제 + 선택지 출력
-#     user = ask_number("정답 번호: ", 1, len(quiz.choices))
-#     if quiz.is_correct(user):
-#         print("정답입니다! ⭕")
-#     else:
-#         print("틀렸어요. ❌")
+def ask_text(prompt):
+    while True:
+        text = input(prompt).strip()
 
-#     print()                         # 문제 사이 빈 줄 (보기 좋게)
+        if text == "":
+            print("빈칸은 입력할 수 없습니다. 다시 입력해 주세요.")
+            continue
+
+        return text
 
 def play_quiz():
     print("퀴즈 풀기를 시작합니다!")
@@ -68,6 +68,37 @@ def play_quiz():
     print("===== 퀴즈 결과 =====")
     print(f"총 {len(quizzes)}문제 중 {score}문제를 맞혔습니다!")
 
+def add_quiz():
+    print("===== 새로운 퀴즈 추가 =====")
+
+    question = input("문제를 입력하세요: ")
+
+    print("입력한 문제:", question)
+
+    choices = []
+
+    for i in range(4):
+        choice = ask_text(f"{i + 1}번 선택지: ")
+        choices.append(choice)
+    
+    answer = ask_number("정답 번호: ", 1, 4)
+
+    new_quiz = Quiz(question, choices, answer)
+
+    quizzes.append(new_quiz)
+    
+    print("퀴즈가 추가되었습니다!")
+    print("현재 퀴즈 개수:", len(quizzes))
+
+
+def list_quizzes():
+    print("===== 퀴즈 목록 =====")
+
+    for i, quiz in enumerate(quizzes, start=1):
+        print(f"{i}. {quiz.question}")
+
+    print(f"총 {len(quizzes)}개의 퀴즈가 있습니다.")
+
 def show_menu():
         """메뉴를 출력한다."""
         print("\n===== 파이썬 기초 퀴즈 게임 =====")
@@ -88,9 +119,9 @@ def run():
             if choice == 1:
                 play_quiz()
             elif choice == 2:
-                print("[퀴즈 추가] 준비 중입니다.")
+                add_quiz()
             elif choice == 3:
-                print("[퀴즈 목록] 준비 중입니다.")
+                list_quizzes()
             elif choice == 4:
                 print("[점수 확인] 준비 중입니다.")
             elif choice == 5:
