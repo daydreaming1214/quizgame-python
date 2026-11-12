@@ -45,7 +45,28 @@ def ask_number(prompt, min_value, max_value):
 #         print("정답입니다! ⭕")
 #     else:
 #         print("틀렸어요. ❌")
+
 #     print()                         # 문제 사이 빈 줄 (보기 좋게)
+
+def play_quiz():
+    print("퀴즈 풀기를 시작합니다!")
+
+    score = 0  # 점수 초기화
+
+    for quiz in quizzes:
+        quiz.show()
+        user = ask_number("정답 번호: ", 1, len(quiz.choices))
+
+        if quiz.is_correct(user):
+            print("정답입니다!")
+            score += 1
+        else:
+            print("틀렸어요!")
+
+        print()
+
+    print("===== 퀴즈 결과 =====")
+    print(f"총 {len(quizzes)}문제 중 {score}문제를 맞혔습니다!")
 
 def show_menu():
         """메뉴를 출력한다."""
@@ -65,7 +86,7 @@ def run():
             choice = ask_number("번호를 선택하세요: ", 1, 5)        
 
             if choice == 1:
-                print("[퀴즈 풀기] 준비 중입니다.")
+                play_quiz()
             elif choice == 2:
                 print("[퀴즈 추가] 준비 중입니다.")
             elif choice == 3:
