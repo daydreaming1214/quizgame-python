@@ -1,5 +1,6 @@
-from main import ask_number, ask_text
+from input_utils import ask_number, ask_text
 from quiz import Quiz
+import json
 
 class QuizGame:
     def __init__(self, quizzes):
@@ -48,7 +49,8 @@ class QuizGame:
         if score > self.best_score:
                 self.best_score = score
                 print("새로운 최고 점수를 기록했습니다!")
-
+       
+        self.save_state()
 
     def add_quiz(self):
         print("===== 새로운 퀴즈 추가 =====")
@@ -69,6 +71,8 @@ class QuizGame:
 
         print("퀴즈가 추가되었습니다!")
         print("현재 퀴즈 개수:", len(self.quizzes))
+        
+        self.save_state()
 
     def show_best_score(self):
         print("===== 최고 점수 =====")
@@ -88,26 +92,75 @@ class QuizGame:
         print("5. 종료")
 
     def run(self):
-        while True:
-            self.show_menu()
+        try:
+            while True:
+                self.show_menu()
 
-            choice = ask_number("번호를 선택하세요: ", 1, 5)
+                choice = ask_number("번호를 선택하세요: ", 1, 5)
 
-            if choice == 1:
-                self.play_quiz()
-            elif choice == 2:
-                self.add_quiz()
-            elif choice == 3:
-                self.list_quizzes()
-            elif choice == 4:
-                self.show_best_score()
-            elif choice == 5:
-                print("프로그램을 종료합니다.")
-                break
+                if choice == 1:
+                    self.play_quiz()
+                elif choice == 2:
+                    self.add_quiz()
+                elif choice == 3:
+                    self.list_quizzes()
+                elif choice == 4:
+                    self.show_best_score()
+                elif choice == 5:
+                    print("프로그램을 종료합니다.")
+                    break
+
+        except (KeyboardInterrupt, EOFError):
+            print("\n입력이 중단되어 프로그램을 종료합니다.")
+
+    def save_state(self):
+        data = {
+            "quizzes": [
+                {
+                    "question": quiz.question,
+                    "choices": quiz.choices,
+                    "answer": quiz.answer
+                }
+                for quiz in self.quizzes
+            ],
+            "best_score": self.best_score,
+            "has_played": self.has_played
+        }
+
+        with open("state.json", "w", encoding="utf-8") as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
+
+        print("게임 데이터가 저장되었습니다!")
+
+    def load_state(self):
+        try:
+            with open("state.json", "r", encoding="utf-8") as file:
+                data = json.load(file)
+
+            loaded_quizzes = []
+
+            for item in data["quizzes"]:
+                quiz = Quiz(
+                    item["question"],
+                    item["choices"],
+                    item["answer"]
+                )
+                loaded_quizzes.append(quiz)
+
+            self.quizzes = loaded_quizzes
+            self.best_score = data["best_score"]
+            self.has_played = data.get("has_played", False)
+
+            print("게임 데이터를 불러왔습니다!")
+
+        except (FileNotFoundError, json.JSONDecodeError, KeyError):
+            print("저장된 데이터가 없거나 JSON 파일이 손상되었습니다.")
+            print("기본 퀴즈로 시작합니다.")
 
 if __name__ == "__main__":
-    from main import quizzes
+    from quiz_data import quizzes
 
     game = QuizGame(quizzes)
 
+    game.load_state()
     game.run()
