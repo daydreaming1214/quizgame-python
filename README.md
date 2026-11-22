@@ -78,12 +78,15 @@ py quiz_game.py
 
 | 파일 | 역할 |
 |---|---|
-| main.py | 공통 입력 함수와 기본 퀴즈 데이터 |
+| main.py | 프로젝트 시작 코드 |
+| input_utils.py | 공통 입력과 입력값 검사 |
+| quiz_data.py | 기본 퀴즈 데이터 |
 | quiz.py | 개별 퀴즈를 표현하는 Quiz 클래스 |
-| quiz_game.py | 게임 전체를 관리하는 QuizGame 클래스와 실행 코드 |
-| state.json | 퀴즈 목록과 최고 점수 저장 |
+| quiz_game.py | 게임 진행과 데이터 저장·불러오기 |
+| state.json | 실행 중 생성되는 퀴즈와 최고 점수 데이터 |
 | README.md | 프로젝트 소개와 실행 방법 |
-| .gitignore | Git에서 제외할 파일 설정 |
+| .gitignore | 실행 데이터와 백업 파일 등의 Git 제외 설정 |
+| docs/screenshots/ | 개발환경과 프로그램 실행 화면 |
 
 ## 6. 클래스 구성
 
@@ -150,7 +153,31 @@ UTF-8 인코딩을 사용하며 다음 정보를 저장합니다.
 저장 파일이 없거나 JSON 문법이 손상된 경우에는
 안내 메시지를 출력하고 기본 퀴즈로 시작합니다.
 
+state.json은 프로젝트 루트에 저장됩니다.
+Git 관리에서는 제외되며, 파일이 없으면 기본 퀴즈로 시작합니다.
+퀴즈 추가, 플레이 완료 또는 프로그램 종료 시 저장됩니다.
+
 ## Git 저장소 복제 실습
 
 GitHub 저장소를 별도 폴더에 clone하고,
 복제한 폴더에서 README를 수정하여 commit과 push를 실습했습니다.
+
+## 실행 화면
+
+### 개발환경
+![개발환경](docs/screenshots/environment.png)
+
+### 퀴즈 추가
+![퀴즈 추가](docs/screenshots/add_quiz.png)
+
+### 퀴즈 목록
+![퀴즈 목록](docs/screenshots/list.png)
+
+### 플레이 결과
+![플레이 결과](docs/screenshots/play.png)
+
+### 최고 점수
+![최고 점수](docs/screenshots/score.png)
+
+### Git 이력
+![Git 이력](docs/screenshots/git_log.png)
