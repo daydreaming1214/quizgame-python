@@ -113,6 +113,12 @@ class QuizGame:
         except (KeyboardInterrupt, EOFError):
             print("\n입력이 중단되어 프로그램을 종료합니다.")
 
+        finally:
+            try:
+                self.save_state()
+            except OSError:
+                print("파일을 저장하지 못했습니다. 저장 위치와 권한을 확인해주세요.")
+                
     def save_state(self):
         data = {
             "quizzes": [
