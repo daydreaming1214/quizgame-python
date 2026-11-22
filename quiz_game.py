@@ -1,6 +1,9 @@
+from pathlib import Path
 from input_utils import ask_number, ask_text
 from quiz import Quiz
 import json
+
+STATE_PATH = Path(__file__).resolve().parent / "state.json"
 
 class QuizGame:
     def __init__(self, quizzes):
@@ -118,7 +121,7 @@ class QuizGame:
                 self.save_state()
             except OSError:
                 print("파일을 저장하지 못했습니다. 저장 위치와 권한을 확인해주세요.")
-                
+
     def save_state(self):
         data = {
             "quizzes": [
@@ -132,15 +135,19 @@ class QuizGame:
             "best_score": self.best_score,
             "has_played": self.has_played
         }
+        try:
+            with open(STATE_PATH, "w", encoding="utf-8") as file:
+                json.dump(data, file, ensure_ascii=False, indent=4)
 
-        with open("state.json", "w", encoding="utf-8") as file:
-            json.dump(data, file, ensure_ascii=False, indent=4)
+        except OSError as error:
+            print(f"게임 데이터를 저장하지 못했습니다: {error}")
 
-        print("게임 데이터가 저장되었습니다!")
+        else:
+            print("게임 데이터가 저장되었습니다!")
 
     def load_state(self):
         try:
-            with open("state.json", "r", encoding="utf-8") as file:
+            with open(STATE_PATH, "r", encoding="utf-8") as file:
                 data = json.load(file)
 
             loaded_quizzes = []
@@ -161,6 +168,10 @@ class QuizGame:
 
         except (FileNotFoundError, json.JSONDecodeError, KeyError):
             print("저장된 데이터가 없거나 JSON 파일이 손상되었습니다.")
+            print("기본 퀴즈로 시작합니다.")
+
+        except OSError as error:
+            print(f"저장 파일을 읽지 못했습니다: {error}")
             print("기본 퀴즈로 시작합니다.")
 
 if __name__ == "__main__":
