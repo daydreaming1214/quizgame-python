@@ -218,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Quiz Game 프로젝트 전용
+backup/
+main_backup.py
+state.json  
